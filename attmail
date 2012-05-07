@@ -1,0 +1,66 @@
+#!/bin/bash
+# Author: Max Maass
+#
+# Parameter:
+#	attmail [From] [To] [Subject] [Body] [Attachment1] [Attachment2] ... [AttachmentX]
+#
+# Depends on the following applications to be installed and working:
+# 	- sendmail
+#	- file (should be preinstalled)
+# 
+# I am aware of the fact that sendmail isn't ideal, but it was the only application available on the webserver I wrote this code for.
+# Loosely based on Code from the following Site:
+# http://www.unix.com/aix/177948-how-send-attachment-using-sendmail-command-without-uuencode-command.html (Sendmail-Code)
+# 
+# Notice about commented Code:
+# For your convenience, I left some snippets of debug code in this version. If you encounter any problems, feel free to try to debug using the proposed "echo" commands, and any additional means you see fit to use ;-)
+# 
+# License:
+# Use this code as you see fit. I can not be held liable for any damaged to anything, including clawed out eyes when reading my code.
+# If you use this code, feel free to leave a note at blog.velcommuta.de/2012/coding-project-of-the-day-attmail/
+# You are allowed to do anything with this code, including commercial use and editing it to lessen the burden on your eyes. Please leave a note about the original author, though.
+#
+IFS=\"
+declare -a params=( $* )
+# echo "Begin PARAMS"
+# for (( i=0; i<${#params[*]}; i++))
+# do
+#     echo "$i=${params[i]}"
+# done
+# echo "END PARAMS"
+# echo
+declare -a mime=()
+for (( i=4; i<${#params[*]}; i++))
+do
+    mime[i-4]=`file --mime-encoding ${params[i]} | sed -e 's/.*: //g'`
+done
+# echo "Begin MIME"
+# for (( i=0; i<${#mime[*]}; i++))
+# do
+#     echo "$i=${mime[i]}"
+# done
+# echo "END MIME"
+# echo
+# echo "Begin MAIL"
+( echo "to: ${params[1]}"
+  echo "from: ${params[0]}"
+  echo "subject: ${params[2]}"
+  echo "mime-version: 1.0"
+  echo "content-type: multipart/related; boundary=xxxRANDOMSTRINGxxx"
+  echo
+  echo "--xxxRANDOMSTRINGxxx"
+  echo "content-type: text/plain"
+  echo
+  echo "${params[3]}"
+  echo # Begin Loop for adding attachments
+  for (( i=0; i<${#mime[*]}; i++))
+  do
+      echo "--xxxRANDOMSTRINGxxx"
+      echo "content-type: ${mime[i]}; name=${params[i+4]}"
+      echo "content-transfer-encoding: base64"
+      echo
+      base64 ${params[i+4]}
+      echo
+  done
+) | sendmail -t -i # comment out the pipe to get the input sendmail gets, for debugging
+echo "Mail sent with ${#mime[*]} attachments"
