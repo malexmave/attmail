@@ -1,0 +1,21 @@
+Attmail - Send Mails from Shell with attachments using sendmail.
+
+Parameters:
+	attmail [From] [To] [Subject] [Body] [Attachment1] [Attachment2] ... [AttachmentX]
+
+Depends on the following applications to be installed and working:
+ 	- sendmail
+	- file (should be preinstalled)
+ 
+I am aware of the fact that sendmail isn't ideal, but it was the only application available on the webserver I wrote this code for.
+
+Loosely based on Code from the following Site:
+http://www.unix.com/aix/177948-how-send-attachment-using-sendmail-command-without-uuencode-command.html (Sendmail-Code)
+ 
+Notice about commented Code:
+For your convenience, I left some snippets of debug code in this version. If you encounter any problems, feel free to try to debug using the proposed "echo" commands, and any additional means you see fit to use ;-)
+
+License:
+Use this code as you see fit. I can not be held liable for any damaged to anything, including clawed out eyes when reading my code.
+If you use this code, feel free to leave a note at blog.velcommuta.de/2012/coding-project-of-the-day-attmail/
+You are allowed to do anything with this code, including commercial use and editing it to lessen the burden on your eyes. Please leave a note about the original author, though.
