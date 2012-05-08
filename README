@@ -3,10 +3,12 @@ Attmail - Send Mails from Shell with attachments using sendmail.
 Parameters:
 	attmail [From] [To] [Subject] [Body] [Attachment1] [Attachment2] ... [AttachmentX]
 
+attmail supports full file paths and parameters passed via xarg, it is, however, largely untested. Use it at your own risk and always check that it is working correctly before using it for something important.
+
 Depends on the following applications to be installed and working:
- 	- sendmail
-	- file (should be preinstalled)
- 
+	- sendmail (Part of a larger Package)
+	- Some system tools like "file", which every distro should have.
+
 I am aware of the fact that sendmail isn't ideal, but it was the only application available on the webserver I wrote this code for.
 
 Loosely based on Code from the following Site:
